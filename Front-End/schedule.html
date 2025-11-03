@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جدولي الأكاديمي - نظام التسجيل</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="static/css/style.css">
+
+    <style>
+        /* CSS إضافي خاص بصفحة الجدول */
+        .schedule-grid {
+            border: 1px solid var(--bs-border-color);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        .schedule-header {
+            background: var(--primary-gradient);
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        .time-slot {
+            font-weight: bold;
+            background-color: var(--secondary-bg);
+            border-right: 1px solid var(--bs-border-color);
+            text-align: center;
+            vertical-align: middle;
+            min-width: 120px;
+        }
+        .course-cell {
+            text-align: center;
+            vertical-align: middle;
+            height: 100px; /* لتحديد ارتفاع الخلايا */
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .course-cell:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transform: scale(1.01);
+            z-index: 10;
+        }
+        .course-cell.cs-class { background-color: rgba(90, 91, 232, 0.1); border-left: 5px solid #5a5be8; }
+        .course-cell.math-class { background-color: rgba(255, 193, 7, 0.1); border-left: 5px solid #ffc107; }
+        .course-cell.eng-class { background-color: rgba(40, 167, 69, 0.1); border-left: 5px solid #28a745; }
+        .course-cell.arab-class { background-color: rgba(220, 53, 69, 0.1); border-left: 5px solid #dc3545; }
+    </style>
+</head>
+<body>
+
+    <div class="d-flex" id="wrapper">
+
+        <div class="sidebar-wrapper animate__animated animate__fadeInLeft" id="sidebar-wrapper">
+            <div class="sidebar-heading text-center py-4 primary-color fw-bold border-bottom">
+                <i class="bi bi-mortarboard-fill fs-3 me-2"></i> نظام الكلية الذكي
+            </div>
+            <div class="list-group list-group-flush my-3">
+                <a href="index.html" class="list-group-item list-group-item-action py-3 ripple" aria-current="true">
+                    <i class="bi bi-speedometer2 me-2"></i> لوحة التحكم
+                </a>
+                <a href="profile.html" class="list-group-item list-group-item-action py-3 ripple">
+                    <i class="bi bi-person-fill me-2"></i> الملف الشخصي
+                </a>
+                <a href="catalog.html" class="list-group-item list-group-item-action py-3 ripple">
+                    <i class="bi bi-journals me-2"></i> تسجيل المواد
+                </a>
+                <a href="schedule.html" class="list-group-item list-group-item-action active py-3 ripple">
+                    <i class="bi bi-calendar-week-fill me-2"></i> جدولي الأكاديمي
+                </a>
+                <a href="payment.html" class="list-group-item list-group-item-action py-3 ripple">
+                    <i class="bi bi-credit-card-fill me-2"></i> الرسوم والدفع
+                </a>
+                <a href="management.html" class="list-group-item list-group-item-action py-3 ripple text-danger fw-bold">
+                    <i class="bi bi-person-workspace me-2"></i> لوحة الإدارة
+                </a>
+                <a href="#" class="list-group-item list-group-item-action py-3 ripple" onclick="logout()">
+                    <i class="bi bi-box-arrow-right me-2"></i> تسجيل خروج
+                </a>
+            </div>
+        </div>
+        
+        <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light py-4 px-4 border-bottom">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-list primary-color fs-2 me-3" id="menu-toggle"></i>
+                    <h2 class="fs-4 mb-0 fw-bold">جدولي الأكاديمي - الفصل الحالي</h2>
+                </div>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <button class="btn btn-sm btn-outline-primary me-2" id="theme-toggle">
+                                <i class="bi bi-moon-stars-fill"></i>
+                            </button>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle second-text fw-bold" href="#" id="navbarDropdown"
+                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-fill me-2"></i> محمد الأحمد
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="profile.html">الملف الشخصي</a></li>
+                                <li><a class="dropdown-item" href="management.html">لوحة الإدارة</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="logout()">تسجيل خروج</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="container-fluid px-4">
+                
+                <div class="row my-4">
+                    <div class="col-12">
+                        <h3 class="fs-4 mb-3 primary-color">جدول المحاضرات</h3>
+                        <div class="schedule-grid bg-white shadow-sm p-0">
+                            <table class="table table-bordered table-hover mb-0">
+                                <thead class="schedule-header">
+                                    <tr>
+                                        <th scope="col" style="width: 120px;">الوقت / اليوم</th>
+                                        <th scope="col">الأحد</th>
+                                        <th scope="col">الإثنين</th>
+                                        <th scope="col">الثلاثاء</th>
+                                        <th scope="col">الأربعاء</th>
+                                        <th scope="col">الخميس</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="time-slot">8:00 - 8:50 صباحًا</td>
+                                        <td class="course-cell eng-class" 
+                                            data-bs-toggle="tooltip" data-bs-placement="top" 
+                                            title="قاعة: 301, المحاضر: أ. فاطمة سعيد">
+                                            <span class="fw-bold">ENG105</span><br>اللغة الإنجليزية
+                                        </td>
+                                        <td></td>
+                                        <td class="course-cell eng-class" 
+                                            data-bs-toggle="tooltip" data-bs-placement="top" 
+                                            title="قاعة: 301, المحاضر: أ. فاطمة سعيد">
+                                            <span class="fw-bold">ENG105</span><br>اللغة الإنجليزية
+                                        </td>
+                                        <td></td>
+                                        <td class="course-cell eng-class" 
+                                            data-bs-toggle="tooltip" data-bs-placement="top" 
+                                            title="قاعة: 301, المحاضر: أ. فاطمة سعيد">
+                                            <span class="fw-bold">ENG105</span><br>اللغة الإنجليزية
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="time-slot">10:00 - 11:30 صباحًا</td>
+                                        <td class="course-cell cs-class" 
+                                            data-bs-toggle="tooltip" data-bs-placement="top" 
+                                            title="قاعة: 202, المحاضر: أ. خالد العلي">
+                                            <span class="fw-bold">CS101</span><br>مقدمة في حاسب
+                                            <button class="btn btn-sm btn-outline-danger mt-1 btn-delete"><i class="bi bi-trash-fill"></i></button>
+                                        </td>
+                                        <td class="course-cell math-class" 
+                                            data-bs-toggle="tooltip" data-bs-placement="top" 
+                                            title="قاعة: 405, المحاضر: د. نورا العتيبي">
+                                            <span class="fw-bold">PHY101</span><br>مبادئ الفيزياء
+                                            <button class="btn btn-sm btn-outline-danger mt-1 btn-delete"><i class="bi bi-trash-fill"></i></button>
+                                        </td>
+                                        <td class="course-cell cs-class" 
+                                            data-bs-toggle="tooltip" data-bs-placement="top" 
+                                            title="قاعة: 202, المحاضر: أ. خالد العلي">
+                                            <span class="fw-bold">CS101</span><br>مقدمة في حاسب
+                                            <button class="btn btn-sm btn-outline-danger mt-1 btn-delete"><i class="bi bi-trash-fill"></i></button>
+                                        </td>
+                                        <td class="course-cell math-class" 
+                                            data-bs-toggle="tooltip" data-bs-placement="top" 
+                                            title="قاعة: 405, المحاضر: د. نورا العتيبي">
+                                            <span class="fw-bold">PHY101</span><br>مبادئ الفيزياء
+                                            <button class="btn btn-sm btn-outline-danger mt-1 btn-delete"><i class="bi bi-trash-fill"></i></button>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="time-slot">9:00 - 10:50 صباحًا</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="course-cell arab-class" 
+                                            data-bs-toggle="tooltip" data-bs-placement="top" 
+                                            title="قاعة: 101, المحاضر: د. فهد التركي">
+                                            <span class="fw-bold">ARAB100</span><br>مهارات اللغة
+                                            <button class="btn btn-sm btn-outline-danger mt-1 btn-delete"><i class="bi bi-trash-fill"></i></button>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="time-slot">1:00 - 2:30 ظهرًا</td>
+                                        <td></td>
+                                        <td class="course-cell math-class" 
+                                            data-bs-toggle="tooltip" data-bs-placement="top" 
+                                            title="قاعة: 501, المحاضر: د. سارة محمود">
+                                            <span class="fw-bold">MATH202</span><br>تفاضل متقدم
+                                            <button class="btn btn-sm btn-outline-danger mt-1 btn-delete"><i class="bi bi-trash-fill"></i></button>
+                                        </td>
+                                        <td></td>
+                                        <td class="course-cell math-class" 
+                                            data-bs-toggle="tooltip" data-bs-placement="top" 
+                                            title="قاعة: 501, المحاضر: د. سارة محمود">
+                                            <span class="fw-bold">MATH202</span><br>تفاضل متقدم
+                                            <button class="btn btn-sm btn-outline-danger mt-1 btn-delete"><i class="bi bi-trash-fill"></i></button>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="time-slot">4:00 - 5:50 مساءً</td>
+                                        <td></td>
+                                        <td class="course-cell cs-class" 
+                                            data-bs-toggle="tooltip" data-bs-placement="top" 
+                                            title="قاعة: 205, المحاضر: أ.د. عبدالله المانع">
+                                            <span class="fw-bold">IS310</span><br>أمن المعلومات
+                                            <button class="btn btn-sm btn-outline-danger mt-1 btn-delete"><i class="bi bi-trash-fill"></i></button>
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row my-5">
+                    <div class="col-lg-6 mb-4 mb-lg-0">
+                        <h3 class="fs-4 mb-3 primary-color">ملخص المواد المسجلة</h3>
+                        <div class="table-responsive bg-white rounded shadow-sm p-4">
+                            <table class="table table-hover table-striped align-middle">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th>رمز المادة</th>
+                                        <th>الساعات</th>
+                                        <th>المحاضر</th>
+                                        <th>حالة التسجيل</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>CS101</td>
+                                        <td>3</td>
+                                        <td>أ. خالد العلي</td>
+                                        <td><span class="badge bg-success">مؤكد</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>MATH202</td>
+                                        <td>4</td>
+                                        <td>د. سارة محمود</td>
+                                        <td><span class="badge bg-success">مؤكد</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>ENG105</td>
+                                        <td>3</td>
+                                        <td>أ. فاطمة سعيد</td>
+                                        <td><span class="badge bg-success">مؤكد</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>IS310</td>
+                                        <td>2</td>
+                                        <td>أ.د. عبدالله المانع</td>
+                                        <td><span class="badge bg-success">مؤكد</span></td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr class="table-info">
+                                        <td class="fw-bold">المجموع</td>
+                                        <td class="fw-bold">12 ساعة</td>
+                                        <td colspan="2"></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <h3 class="fs-4 mb-3 primary-color">تنبيهات الجدول</h3>
+                        <div class="card shadow-sm border-0 rounded-3">
+                            <div class="card-body p-3">
+                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                    <p class="mb-0 small">موعد اختبار مادة CS101 يوم 2025/11/20.</p>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                    <p class="mb-0 small">تم تحديث جدولك بنجاح في 2025/10/31.</p>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            
+            <footer class="footer mt-auto py-3 text-center">
+                <div class="container">
+                    <span class="text-muted">© 2025 نظام إدارة الكلية الذكي.</span>
+                </div>
+            </footer>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="static/js/main.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // تهيئة الـ Tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
+</body>
+</html>
