@@ -1,4 +1,4 @@
-# academic/views.py (الكود الكامل والمدمج)
+# academic/views.py (الكود الكامل والمُصحح)
 
 import uuid
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -19,10 +19,11 @@ from .serializers import (
     InstructorCreateSerializer, 
 ) 
 from .permissions import IsAdministrator, IsInstructor
+from django.shortcuts import render
+# ====================================================================
+# 1. المصادقة (Authentication) - LoginView المُصحح
+# ====================================================================
 
-# ====================================================================
-# 1. المصادقة (Authentication)
-# ====================================================================
 class LoginView(TokenObtainPairView):
     """ نقطة API لتسجيل الدخول وإرجاع التوكن والدور. """
     serializer_class = CustomTokenObtainPairSerializer
@@ -30,10 +31,10 @@ class LoginView(TokenObtainPairView):
     
     def post(self, request, *args, **kwargs):
         
-        # 1. إنشاء المسلسل والتحقق من صلاحيته
+        # 1. إنشاء المسلسل والتحقق من صلاحيته (الحل لمشكلة AttributeError)
         serializer = self.get_serializer(data=request.data)
         try:
-            # 💡 التعديل الحاسم: يجب استدعاء is_valid() قبل الوصول إلى serializer.user
+            # يجب استدعاء is_valid() قبل الوصول إلى serializer.user
             serializer.is_valid(raise_exception=True)
             user = serializer.user 
         except Exception:
@@ -63,7 +64,12 @@ class LoginView(TokenObtainPairView):
 # ====================================================================
 # 2. وظائف الطالب (Student Features)
 # ====================================================================
-
+def management_view(request):
+    """
+    دالة لعرض قالب management.html
+    """
+    # Django يبحث عن management.html داخل المسارات المحددة في settings.py
+    return render(request, 'management.html', {})
 class CourseListView(generics.ListAPIView):
     """ عرض قائمة بالمواد المتاحة للتسجيل. """
     serializer_class = CourseSerializer

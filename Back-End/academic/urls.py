@@ -1,68 +1,46 @@
-# academic/urls.py (الكود الكامل والمدمج)
+# academic/urls.py (الكود الكامل لمسارات الـ API)
 
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView 
 from .views import (
-    LoginView, 
-    CourseListView, 
-    RegisterCourseView, 
-    CancelRegistrationView, # ✅ تم استيراد View الجديدة
-    StudentScheduleView,
-    # Payments
-    InitiatePaymentView,
-    PaymentUpdateView,
-    PaymentHistoryView,
-    # Admin & Instructor
-    AdminCourseCreateView, 
-    AdminInstructorCreateView, # ✅ تم استيراد View الجديدة
-    AdminStudentListView,
-    AdminStudentDetailView,
-    InstructorGradeUpdateView,
-    # Views الأخرى
-    AdminCourseListView, 
-    InstructorCoursesListView, 
-    CourseRegisteredStudentsView, 
-    NotificationCreateView, 
-    NotificationListView, 
+    # Auth
+    LoginView,
+    # Student
+    CourseListView, RegisterCourseView, CancelRegistrationView, StudentScheduleView, NotificationListView,
+    InitiatePaymentView, PaymentUpdateView, PaymentHistoryView,
+    # Admin
+    AdminCourseCreateView, AdminCourseListView, AdminStudentListView, AdminStudentDetailView, AdminInstructorCreateView, NotificationCreateView,
+    # Instructor
+    InstructorCoursesListView, CourseRegisteredStudentsView, InstructorGradeUpdateView
 )
 
 urlpatterns = [
-    # ====================================================
-    # 1. المصادقة (Authentication)
-    # ====================================================
+    # 1. AUTH & JWT
     path('token/', LoginView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    
+    # 2. STUDENT API (مسارات الطالب)
+    path('courses/', CourseListView.as_view(), name='course_list'),
+    path('register/', RegisterCourseView.as_view(), name='course_register'),
+    path('cancel/', CancelRegistrationView.as_view(), name='registration_cancel'),
+    path('schedule/', StudentScheduleView.as_view(), name='student_schedule'),
+    path('notifications/', NotificationListView.as_view(), name='student_notifications'),
+    
+    # Payments (المدفوعات)
+    path('payments/initiate/', InitiatePaymentView.as_view(), name='payment_initiate'),
+    path('payments/update/', PaymentUpdateView.as_view(), name='payment_update'),
+    path('payments/history/', PaymentHistoryView.as_view(), name='payment_history'),
 
-    # ====================================================
-    # 2. وظائف الطالب (Student)
-    # ====================================================
-    path('courses/', CourseListView.as_view(), name='course-list'),
-    path('register/', RegisterCourseView.as_view(), name='course-register'),
-    path('cancel-registration/', CancelRegistrationView.as_view(), name='course-cancel'), # ✅ المسار الجديد لإلغاء التسجيل
-    path('schedule/', StudentScheduleView.as_view(), name='student-schedule'),
-    path('notifications/', NotificationListView.as_view(), name='notification-list'),
+    # 3. ADMIN API (مسارات المسؤول)
+    path('admin/courses/list/', AdminCourseListView.as_view(), name='admin_course_list'),
+    path('admin/courses/add/', AdminCourseCreateView.as_view(), name='admin_course_create'),
+    path('admin/instructors/add/', AdminInstructorCreateView.as_view(), name='admin_instructor_create'),
+    path('admin/students/', AdminStudentListView.as_view(), name='admin_student_list'),
+    path('admin/students/<int:pk>/', AdminStudentDetailView.as_view(), name='admin_student_detail'),
+    path('admin/notifications/send/', NotificationCreateView.as_view(), name='admin_notification_send'),
 
-    # ====================================================
-    # 3. المدفوعات (Payments)
-    # ====================================================
-    path('payments/initiate/', InitiatePaymentView.as_view(), name='payment-initiate'),
-    path('payments/update/', PaymentUpdateView.as_view(), name='payment-update'),
-    path('payments/history/', PaymentHistoryView.as_view(), name='payment-history'),
-
-    # ====================================================
-    # 4. وظائف المسؤول (Admin)
-    # ====================================================
-    path('admin/courses/list/', AdminCourseListView.as_view(), name='admin-course-list'),
-    path('admin/courses/add/', AdminCourseCreateView.as_view(), name='admin-course-add'),
-    path('admin/instructors/add/', AdminInstructorCreateView.as_view(), name='admin-instructor-add'), # ✅ المسار الجديد لإضافة محاضر
-    path('admin/notifications/send/', NotificationCreateView.as_view(), name='admin-notification-send'),
-    path('admin/students/', AdminStudentListView.as_view(), name='admin-student-list'),
-    path('admin/students/<int:pk>/', AdminStudentDetailView.as_view(), name='admin-student-detail'),
-
-    # ====================================================
-    # 5. وظائف المحاضر (Instructor)
-    # ====================================================
-    path('instructor/my-courses/', InstructorCoursesListView.as_view(), name='instructor-my-courses'),
-    path('instructor/courses/<int:course_id>/students/', CourseRegisteredStudentsView.as_view(), name='course-students'),
-    path('instructor/grade/update/', InstructorGradeUpdateView.as_view(), name='instructor-grade-update'),
+    # 4. INSTRUCTOR API (مسارات المحاضر)
+    path('instructor/my-courses/', InstructorCoursesListView.as_view(), name='instructor_courses'),
+    path('instructor/courses/<int:course_id>/students/', CourseRegisteredStudentsView.as_view(), name='course_students'),
+    path('instructor/grade/update/', InstructorGradeUpdateView.as_view(), name='instructor_grade_update'),
 ]

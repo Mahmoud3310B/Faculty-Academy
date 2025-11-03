@@ -1,32 +1,23 @@
-"""
-Django settings for RegistrationSystem project.
-"""
+# Back-End/RegistrationSystem/settings.py
 
 from pathlib import Path
-from datetime import timedelta # ✅ تم استيراد timedelta
-
-
-# ====================================================================
-# إعدادات المشروع الأساسية
-# ====================================================================
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent 
+# 💡 في هيكلتك الجديدة، BASE_DIR يشير إلى مجلد Back-End.
+STATIC_ROOT = BASE_DIR / "staticfiles_collected"# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'django-insecure-your-secret-key-here' # يجب تغييرها لقيمة سرية
 
-
-# Quick-start development settings - unsuitable for production
-# ⚠️ تم تغيير هذا المفتاح لضمان حل مشكلة التوقيع الفوري (401)
-# (يجب أن يكون هذا المفتاح سريًا في بيئة الإنتاج)
-SECRET_KEY = 'a-new-and-very-unique-secret-key-to-force-token-signing-change-2025'
-
+# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*'] # يجب تقييدها في بيئة الإنتاج
 
 
 # Application definition
+
 INSTALLED_APPS = [
-    # 1. تطبيقات Django الأساسية
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -34,20 +25,19 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
-    # 2. تطبيقات الطرف الثالث
-    'corsheaders', #
+    # Third-party apps
     'rest_framework',
-    'rest_framework_simplejwt', 
+    'rest_framework_simplejwt',
+    'corsheaders', # لتمكين الاتصال بين Frontend و Backend
     
-    # 3. تطبيق المشروع الخاص بك
-    'academic',
+    # My apps
+    'academic', # اسم التطبيق الذي يحتوي على Models و Views
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # ✅ CORS: يجب أن يكون هذا قبل CommonMiddleware
-    'corsheaders.middleware.CorsMiddleware', 
+    'corsheaders.middleware.CorsMiddleware', # يجب أن يكون قبل CommonMiddleware
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -57,10 +47,16 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'RegistrationSystem.urls'
 
+# ====================================================================
+# إعدادات TEMPLATES لخدمة ملفات HTML (مثل login.html)
+# ====================================================================
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            # 💡 التعديل: المسار يشير مباشرة إلى Back-End/templates
+            BASE_DIR / 'templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -77,6 +73,8 @@ WSGI_APPLICATION = 'RegistrationSystem.wsgi.application'
 
 
 # Database
+# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -86,6 +84,8 @@ DATABASES = {
 
 
 # Password validation
+# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -103,58 +103,89 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-LANGUAGE_CODE = 'en-us'
+# https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-TIME_ZONE = 'UTC'
+LANGUAGE_CODE = 'ar-eg' # لتحديد اللغة العربية المصرية
+
+TIME_ZONE = 'Africa/Cairo' # أو التوقيت المحلي لمنطقتك
 
 USE_I18N = True
 
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
+# ====================================================================
+# إعدادات STATIC FILES لخدمة CSS/JS
+# ====================================================================
+
 STATIC_URL = 'static/'
 
+STATICFILES_DIRS = [
+    # 💡 التعديل: المسار يشير مباشرة إلى Back-End/static
+    BASE_DIR / 'static',
+]
 
 # Default primary key field type
+# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# ==================================================================
-# 🔑 إعدادات المصادقة والـ API (المُصححة والمدمجة)
-# ==================================================================
+# ====================================================================
+# إعدادات Django REST Framework (DRF)
+# ====================================================================
 
-# 1. إعدادات CORS (مهمة للربط مع الواجهة الأمامية)
-CORS_ALLOW_ALL_ORIGINS = True # ⚠️ للسماح لأي مصدر بالوصول أثناء التطوير (DEBUG=True)
-
-# 2. إعدادات Django REST Framework
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
-    )
+    ),
 }
 
-# 3. إعدادات Django Simple JWT (تم إضافتها وتصحيحها لحل مشكلة 401)
+# ====================================================================
+# إعدادات CORS (للسماح لـ Frontend بالتواصل مع Backend)
+# ====================================================================
+
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:8000",
+    "http://localhost:8000",
+    # إذا كنت تستخدم خادم تطوير آخر (مثل Live Server) على منفذ مختلف:
+    # "http://127.0.0.1:5500", 
+]
+
+# للسماح بجميع الأساليب (GET, POST, OPTIONS, إلخ)
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+
+# ====================================================================
+# إعدادات Simple JWT
+# ====================================================================
+
 SIMPLE_JWT = {
-    # 🚨 حل مشكلة الـ 401 الفوري: التأكد من صيغة Bearer وربط الـ SECRET_KEY
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),  
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
-    'ROTATE_REFRESH_TOKENS': False,
-    'BLACKLIST_AFTER_ROTATION': False,
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60), # صلاحية التوكن لساعة
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7), # صلاحية توكن التحديث لأسبوع
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
     'UPDATE_LAST_LOGIN': False,
 
     'ALGORITHM': 'HS256',
-    'SIGNING_KEY': SECRET_KEY, # 🚨 مهم جدًا: ربط المفتاح السري بالتوقيع (سبب الخطأ الأرجح)
+    'SIGNING_KEY': SECRET_KEY,
     'VERIFYING_KEY': None,
     'AUDIENCE': None,
     'ISSUER': None,
     'JWK_URL': None,
-    'LEEWAY': 0, 
+    'LEEWAY': 0,
 
-    'AUTH_HEADER_TYPES': ('Bearer',), # ✅ يجب أن تكون 'Bearer' لمطابقة كود management.js
+    'AUTH_HEADER_TYPES': ('Bearer',),
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
     'USER_ID_FIELD': 'id',
     'USER_ID_CLAIM': 'user_id',
@@ -162,7 +193,7 @@ SIMPLE_JWT = {
 
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
     'TOKEN_TYPE_CLAIM': 'token_type',
-    'TOKEN_USER_CLASS': 'rest_framework_simplejwt.models.TokenUser',
+    'TOKEN_USER_CLASS': 'django.contrib.auth.models.User',
 
     'JTI_CLAIM': 'jti',
 
