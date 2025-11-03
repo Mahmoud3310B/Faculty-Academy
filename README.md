@@ -1,3 +1,4 @@
+# متنسوش 
 Comprehensive Academic Registration Systemfor we Delevoper Faculty-Academy from Django 🎓
 # Project Summary 🎓
 This project is a comprehensive Student Information System (SIS) primarily developed with the Django framework to build a robust Backend API for data management and logic control. The frontend utilizes standard HTML/CSS/JavaScript (Vanilla JS with Bootstrap) to deliver a fast and responsive user experience. The system is designed to automate and manage registration processes, course management, grading, and fees across three key user roles: Student, Instructor, and Administrator.

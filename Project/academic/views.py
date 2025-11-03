@@ -1,4 +1,3 @@
-# academic/views.py (الكود الكامل والمُصحح)
 
 import uuid
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -21,7 +20,7 @@ from .serializers import (
 from .permissions import IsAdministrator, IsInstructor
 from django.shortcuts import render
 # ====================================================================
-# 1. المصادقة (Authentication) - LoginView المُصحح
+# 1. المصادقة (Authentication) - LoginView 
 # ====================================================================
 
 class LoginView(TokenObtainPairView):

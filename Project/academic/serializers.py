@@ -1,23 +1,17 @@
-# academic/serializers.py (المُصحح)
 
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer # ✅ تم استيراد الكلاس الصحيح
 from .models import Student, Instructor, Course, Registration, Payment, Notification
 
-# ----------------- JWT و Auth (المُصحح) -----------------
 
-# 🚨 أهم تصحيح: يرث الآن من الكلاس الأساسي لـ Simple JWT لضمان إنشاء الـ Token بشكل صحيح.
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     
-    # لا حاجة لتعريف validate() هنا، الكلاس الأب يقوم بكل شيء.
     
     @classmethod
     def get_token(cls, user):
-        # 1. إنشاء التوكن الأساسي (يتضمن access و refresh)
         token = super().get_token(user)
 
-        # 2. إضافة الدور (Role) إلى الحمولة (Payload)
         if user.is_superuser:
             role = 'Administrator'
         elif Instructor.objects.filter(user=user).exists():
@@ -30,7 +24,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['role'] = role
         return token
 
-# ----------------- الإدارة والبيانات -----------------
 
 class StudentManagementSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
@@ -60,7 +53,6 @@ class NotificationSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'message', 'created_at', 'is_read']
         read_only_fields = ['created_at', 'is_read']
 
-# المسلسل لإنشاء المحاضر
 class InstructorCreateSerializer(serializers.ModelSerializer):
     username = serializers.CharField(write_only=True)
     password = serializers.CharField(write_only=True)

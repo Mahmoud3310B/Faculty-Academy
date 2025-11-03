@@ -1,21 +1,16 @@
-# Back-End/RegistrationSystem/settings.py
 
 from pathlib import Path
 from datetime import timedelta
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent 
-# 💡 في هيكلتك الجديدة، BASE_DIR يشير إلى مجلد Back-End.
-STATIC_ROOT = BASE_DIR / "staticfiles_collected"# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-your-secret-key-here' # يجب تغييرها لقيمة سرية
+STATIC_ROOT = BASE_DIR / "staticfiles_collected"
+SECRET_KEY = 'django-insecure-your-secret-key-here'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*'] # يجب تقييدها في بيئة الإنتاج
+ALLOWED_HOSTS = ['*'] 
 
 
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -24,20 +19,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
-    # Third-party apps
     'rest_framework',
     'rest_framework_simplejwt',
-    'corsheaders', # لتمكين الاتصال بين Frontend و Backend
-    
-    # My apps
-    'academic', # اسم التطبيق الذي يحتوي على Models و Views
+    'corsheaders', 
+    'academic', 
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware', # يجب أن يكون قبل CommonMiddleware
+    'corsheaders.middleware.CorsMiddleware', 
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -47,14 +38,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'RegistrationSystem.urls'
 
-# ====================================================================
-# إعدادات TEMPLATES لخدمة ملفات HTML (مثل login.html)
-# ====================================================================
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            # 💡 التعديل: المسار يشير مباشرة إلى Back-End/templates
             BASE_DIR / 'templates',
         ],
         'APP_DIRS': True,
@@ -72,19 +59,12 @@ TEMPLATES = [
 WSGI_APPLICATION = 'RegistrationSystem.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-
-# Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -102,31 +82,20 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.0/topics/i18n/
+LANGUAGE_CODE = 'ar-ly' 
 
-LANGUAGE_CODE = 'ar-eg' # لتحديد اللغة العربية المصرية
-
-TIME_ZONE = 'Africa/Cairo' # أو التوقيت المحلي لمنطقتك
+TIME_ZONE = 'Africa/Cairo' 
 
 USE_I18N = True
 
 USE_TZ = True
 
 
-# ====================================================================
-# إعدادات STATIC FILES لخدمة CSS/JS
-# ====================================================================
-
 STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
-    # 💡 التعديل: المسار يشير مباشرة إلى Back-End/static
     BASE_DIR / 'static',
 ]
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -144,9 +113,6 @@ REST_FRAMEWORK = {
     ),
 }
 
-# ====================================================================
-# إعدادات CORS (للسماح لـ Frontend بالتواصل مع Backend)
-# ====================================================================
 
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000",

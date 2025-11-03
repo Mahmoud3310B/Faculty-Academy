@@ -1,0 +1,8 @@
+Django>=4.0  
+djangorestframework>=3.13  
+python-decouple>=3.6  
+psycopg2-binary>=2.9  
+mysqlclient>=2.1  
+Pillow>=9.0.1  
+djangorestframework-simplejwt>=5.2  
+requests
