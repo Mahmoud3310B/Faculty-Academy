@@ -16,7 +16,7 @@ from .serializers import (
     PaymentSerializer, 
     StudentManagementSerializer,
     NotificationSerializer,
-    InstructorCreateSerializer, # ✅ المسلسل الجديد لإضافة محاضر
+    InstructorCreateSerializer, 
 ) 
 from .permissions import IsAdministrator, IsInstructor
 
@@ -29,20 +29,34 @@ class LoginView(TokenObtainPairView):
     permission_classes = [AllowAny]
     
     def post(self, request, *args, **kwargs):
+        
+        # 1. إنشاء المسلسل والتحقق من صلاحيته
+        serializer = self.get_serializer(data=request.data)
+        try:
+            # 💡 التعديل الحاسم: يجب استدعاء is_valid() قبل الوصول إلى serializer.user
+            serializer.is_valid(raise_exception=True)
+            user = serializer.user 
+        except Exception:
+            # إذا فشل التحقق، نرد بخطأ Bad Request
+            return Response({'detail': 'بيانات اعتماد غير صالحة.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # 2. إنشاء الرد الخاص بالتوكن باستخدام المنطق الأصلي
         response = super().post(request, *args, **kwargs)
         
+        # 3. إدراج بيانات إضافية (الدور ومسار التوجيه) في الرد
         if response.status_code == 200:
-            # بعد النجاح، نحدد دور المستخدم لإرساله للواجهة الأمامية
-            user = self.get_serializer(data=request.data).user
-            role = 'Student'
+            user_role = 'Student'
+            redirect_url = '/index.html'
+            
             if user.is_superuser or user.is_staff:
-                role = 'Administrator'
+                user_role = 'Administrator'
+                redirect_url = '/management.html'
             elif hasattr(user, 'instructor'):
-                role = 'Instructor'
-                
-            response.data['role'] = role
-            # مسار التوجيه بعد تسجيل الدخول
-            response.data['redirect_url'] = '/management.html' if role in ['Administrator', 'Instructor'] else '/index.html'
+                user_role = 'Instructor'
+                redirect_url = '/management.html'
+            
+            response.data['role'] = user_role
+            response.data['redirect_url'] = redirect_url
             
         return response
 
@@ -90,7 +104,7 @@ class RegisterCourseView(APIView):
             return Response({'detail': f'حدث خطأ: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class CancelRegistrationView(APIView):
-    """ ✨ الجديدة: نقطة API لإلغاء تسجيل مادة. """
+    """ نقطة API لإلغاء تسجيل مادة. """
     permission_classes = [IsAuthenticated] 
 
     def post(self, request):
@@ -244,7 +258,7 @@ class AdminCourseCreateView(generics.CreateAPIView):
     permission_classes = [IsAdministrator]
 
 class AdminInstructorCreateView(generics.CreateAPIView):
-    """ ✨ الجديدة: نقطة API لإنشاء حساب محاضر جديد (للمسؤول). """
+    """ نقطة API لإنشاء حساب محاضر جديد (للمسؤول). """
     serializer_class = InstructorCreateSerializer
     permission_classes = [IsAdministrator] 
     
