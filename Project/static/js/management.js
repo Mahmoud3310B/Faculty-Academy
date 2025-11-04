@@ -11,11 +11,21 @@ const API_BASE_URL = 'http://127.0.0.1:8000/api/';
  * دالة تسجيل الخروج: مسح البيانات وإعادة التوجيه إلى صفحة الدخول.
  */
 function logout() {
+// 1. حذف التوكنات
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('userRole');
-    window.location.href = '/login.html';
-}
+        if (confirm("هل تريد تسجيل الخروج؟")) {
+
+    // 2. إعادة التوجيه باستخدام المتغير الذي مررناه من القالب
+    if (typeof LOGIN_URL !== 'undefined') {
+        window.location.href = LOGIN_URL; // ✅ يستخدم المسار المُعالَج
+    } else {
+        // إذا فشلت عملية تمرير المتغير، استخدم المسار الثابت
+        window.location.href = '/login'; 
+    }
+}}
+    // حذف بيانات الجلسة من التخزين الم
 
 /**
  * دالة لتحديث الـ Access Token باستخدام الـ Refresh Token.

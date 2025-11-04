@@ -49,8 +49,7 @@ function handleLogin(event) {
             messageElement.style.color = 'green';
             
             // 2. التوجيه إلى الصفحة الصحيحة بناءً على الرد من الـ Backend
-            const redirectUrl = body.redirect_url || '/index.html'; 
-            window.location.href = redirectUrl; 
+            const redirectUrl = body.redirect_url || '/management'; // تم تغيير القيمة الافتراضية
 
         } else {
             // ❌ فشل تسجيل الدخول

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" data-bs-theme="light">
 <head>
@@ -59,22 +60,22 @@
                 <i class="bi bi-mortarboard-fill fs-3 me-2"></i> نظام الكلية الذكي
             </div>
             <div class="list-group list-group-flush my-3">
-                <a href="index.html" class="list-group-item list-group-item-action py-3 ripple" aria-current="true">
+                <a href="{% url 'index_page' %}" class="list-group-item list-group-item-action py-3 ripple" aria-current="true">
                     <i class="bi bi-speedometer2 me-2"></i> لوحة التحكم
                 </a>
-                <a href="profile.html" class="list-group-item list-group-item-action py-3 ripple">
+                <a href="{% url 'profile_page' %}" class="list-group-item list-group-item-action py-3 ripple">
                     <i class="bi bi-person-fill me-2"></i> الملف الشخصي
                 </a>
-                <a href="catalog.html" class="list-group-item list-group-item-action py-3 ripple">
+                <a href="{% url 'catalog_page' %}" class="list-group-item list-group-item-action py-3 ripple">
                     <i class="bi bi-journals me-2"></i> تسجيل المواد
                 </a>
-                <a href="schedule.html" class="list-group-item list-group-item-action active py-3 ripple">
+                <a href="{% url 'schedule_page' %}" class="list-group-item list-group-item-action active py-3 ripple">
                     <i class="bi bi-calendar-week-fill me-2"></i> جدولي الأكاديمي
                 </a>
-                <a href="payment.html" class="list-group-item list-group-item-action py-3 ripple">
+                <a href="{% url 'payment_page' %}" class="list-group-item list-group-item-action py-3 ripple">
                     <i class="bi bi-credit-card-fill me-2"></i> الرسوم والدفع
                 </a>
-                <a href="management.html" class="list-group-item list-group-item-action py-3 ripple text-danger fw-bold">
+                <a href="{% url 'management_page' %}" class="list-group-item list-group-item-action py-3 ripple text-danger fw-bold">
                     <i class="bi bi-person-workspace me-2"></i> لوحة الإدارة
                 </a>
                 <a href="#" class="list-group-item list-group-item-action py-3 ripple" onclick="logout()">
@@ -104,7 +105,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="profile.html">الملف الشخصي</a></li>
-                                <li><a class="dropdown-item" href="management.html">لوحة الإدارة</a></li>
+                                <li><a class="dropdown-item" href="{% url 'management_page' %}">لوحة الإدارة</a></li>
                                 <li><a class="dropdown-item" href="#" onclick="logout()">تسجيل خروج</a></li>
                             </ul>
                         </li>

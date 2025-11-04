@@ -46,15 +46,15 @@ class LoginView(TokenObtainPairView):
         # 3. إدراج بيانات إضافية (الدور ومسار التوجيه) في الرد
         if response.status_code == 200:
             user_role = 'Student'
-            redirect_url = '/index.html'
+            redirect_url = '/index'
             
             if user.is_superuser or user.is_staff:
                 user_role = 'Administrator'
-                redirect_url = '/management.html'
+                redirect_url = '/management'
             elif hasattr(user, 'instructor'):
                 user_role = 'Instructor'
-                redirect_url = '/management.html'
-            
+                redirect_url = '/management'
+
             response.data['role'] = user_role
             response.data['redirect_url'] = redirect_url
             
@@ -68,7 +68,7 @@ def management_view(request):
     دالة لعرض قالب management.html
     """
     # Django يبحث عن management.html داخل المسارات المحددة في settings.py
-    return render(request, 'management.html', {})
+    return render(request, '/managementl', {})
 class CourseListView(generics.ListAPIView):
     """ عرض قائمة بالمواد المتاحة للتسجيل. """
     serializer_class = CourseSerializer
