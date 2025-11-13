@@ -1,68 +1,263 @@
-# بسم الله الرحمن الرحيم وما توفيقي الا بالله متنسوش فلسطين في دعائكم ![Palestine Flag](https://flagcdn.com/w40/ps.png) 
+<p dir="rtl" align="right">
+<b>فلسطين…</b><br>
+وطنٌ محاصرٌ لكنه يحاصر العالم بضميرٍ لا ينام.<br>
+جراحٌ تُعلّمنا معنى الصمود، ودموعٌ تشهد أن الحرية أغلى من الحياة.<br>
+لن تكون فلسطين مجرد خبر، بل ستبقى الحكاية التي تكتبها الأجيال.<br><br>
+<img src="https://flagcdn.com/w40/ps.png">
+</p>
 
-Comprehensive Academic Registration Systemfor we Delevoper Faculty-Academy from Django 🎓
-# Project Summary 🎓
-This project is a comprehensive Student Information System (SIS) primarily developed with the Django framework to build a robust Backend API for data management and logic control. The frontend utilizes standard HTML/CSS/JavaScript (Vanilla JS with Bootstrap) to deliver a fast and responsive user experience. The system is designed to automate and manage registration processes, course management, grading, and fees across three key user roles: Student, Instructor, and Administrator.
+# 🎓 Faculty-Academy – Production-Ready Academic Registration System  
+A full Student Information System (SIS) built with **Django**, offering a complete academic registration workflow for **Students**, **Instructors**, and **Administrators**.  
+The system is designed to be clean, scalable, and ready for production deployment.
 
-# Core Features and Functionality:
-<img width="1055" height="581" alt="image" src="https://github.com/user-attachments/assets/f815bf8a-a9d5-4ee6-8839-c915a9b683e1" />
+---
 
-# Technology Stack
+# 🚀 Overview  
+Faculty-Academy is a role-based academic management system that handles:
 
+- Course registration  
+- Student enrollment  
+- Instructor grading workflow  
+- Schedule management  
+- Admin-level user & course management  
+- Backend API for frontend consumption (Vanilla JS + Bootstrap)  
 
-<img width="1051" height="452" alt="image" src="https://github.com/user-attachments/assets/1eb2fa68-a6c0-4b62-b8c4-d13c04c6b6e7" />
+This project is built with **clean architecture principles** and follows **production-ready Django patterns**.
 
-# Role Structure and Key API Endpoints 
+---
 
-The API endpoints (defined in academic/urls.py) and permissions (in academic/permissions.py) are structured to serve specific roles:
+# 🧩 Features
 
-1. Administrator:
+### 👨‍🎓 Student  
+- View available courses  
+- Register for courses  
+- Access personal schedule  
+- View academic info  
 
-Paths: /api/admin/courses/add/, /api/admin/students/, /api/admin/instructors/add/.
+### 👨‍🏫 Instructor  
+- View assigned courses  
+- Submit or update student grades  
+- Manage course-related data  
 
-Permission: Requires is_superuser or is_staff.
+### 🛡️ Administrator  
+- Create/update/delete Courses  
+- Manage Students & Instructors  
+- Assign instructors to courses  
+- Full admin access through Django Admin  
 
-2. Instructor:
+---
 
-Paths: /api/instructor/my-courses/, /api/instructor/grade/update/.
+# 🏛️ Technology Stack
 
-Permission: Requires the user to be linked to an Instructor object.
+### Backend  
+- Django 4.x  
+- Django Auth (RBAC)  
+- Django Templates  
 
-3. Student:
+### Frontend  
+- HTML  
+- CSS  
+- Vanilla JavaScript  
+- Bootstrap 5  
 
-Paths: /api/courses/ (for registration), /api/schedule/.
+### Database  
+- SQLite (Development)  
+- PostgreSQL (Production Recommended)
 
-Permission: Requires standard authentication (IsAuthenticated).
-# Local Setup Guide (Installation) 🛠️
-# Login Page Project ✨🤍
+---
 
-Prerequisites: Python 3.9+ and pip installed.
+# 🗂️ Project Structure (Production-Ready)
 
-1. Clone the Repository:
-<img width="999" height="183" alt="image" src="https://github.com/user-attachments/assets/ec47c736-ce6c-4873-bc8f-9150272c4fbd" />
+```
+faculty_academy/
+│
+├── academic/                # Core project settings
+│   ├── settings.py
+│   ├── urls.py
+│   ├── permissions.py
+│   └── wsgi.py/asgi.py
+│
+├── students/                # Student app
+├── instructors/             # Instructor app
+├── admin_panel/             # Admin-level routes
+│
+├── static/                  # CSS, JS, images
+├── templates/               # HTML templates
+│   ├── login.html
+│   ├── student/
+│   ├── instructor/
+│   └── admin/
+│
+└── manage.py
+```
 
-2. Create and Activate Virtual Environment:
+---
 
-<img width="999" height="335" alt="image" src="https://github.com/user-attachments/assets/8e4614d2-cf26-4eb5-ae05-7bdf84dd68b6" />
+# 🔐 Role-Based Permissions (Production-Ready)
 
-3. Install Required Packages:
+### **Admin**
+| Endpoint | Description |
+|---------|-------------|
+| `/api/admin/courses/add/` | Add course |
+| `/api/admin/students/` | Manage students |
+| `/api/admin/instructors/add/` | Add instructor |
 
-<img width="1009" height="198" alt="image" src="https://github.com/user-attachments/assets/3c3e1bae-7745-4e0d-ad34-2f543e9537c4" />
+Permission: `is_superuser` or `is_staff`
 
-4. Run Migrations:
+---
 
-<img width="1009" height="178" alt="image" src="https://github.com/user-attachments/assets/7e99f99f-f3b2-4af1-a8ac-9728b5d5fa78" />
-5. Create a Superuser (Admin Account):
+### **Instructor**
+| Endpoint | Description |
+|---------|-------------|
+| `/api/instructor/my-courses/` | View assigned courses |
+| `/api/instructor/grade/update/` | Submit/update grades |
 
-<img width="1012" height="140" alt="image" src="https://github.com/user-attachments/assets/6573ae01-91bc-4d84-b220-5e7e5514f1d3" />
+Permission: Instructor account linked to `Instructor` model
 
-6.  Run the Server:
+---
 
-<img width="994" height="131" alt="image" src="https://github.com/user-attachments/assets/852bd314-9fdb-4ee9-8db0-2692a3558c7d" />
+### **Student**
+| Endpoint | Description |
+|---------|-------------|
+| `/api/courses/` | Register for courses |
+| `/api/schedule/` | View schedule |
 
-7. The system will be accessible via the Django Admin at http://127.0.0.1:8000/admin/ and the main application login page (e.g., http://127.0.0.1:8000/login.html).
+Permission: `IsAuthenticated`
 
-Would you like me to help you draft the requirements.txt file based on the uploaded code and configurations? 
+---
 
+# 🛠️ Installation (Local Setup)
 
-<img width="1911" height="871" alt="image" src="https://github.com/user-attachments/assets/46d51ac5-d5d8-4d88-afe5-d552347dda9d" />
+### 1️⃣ Clone the project
+```bash
+git clone https://github.com/Mahmoud3310B/Faculty-Academy
+cd Faculty-Academy
+```
+
+### 2️⃣ Create & activate virtual environment
+```bash
+python -m venv venv
+```
+
+Windows:
+```bash
+venv\Scripts\activate
+```
+
+Linux/Mac:
+```bash
+source venv/bin/activate
+```
+
+### 3️⃣ Install requirements
+```bash
+pip install -r requirements.txt
+```
+
+### 4️⃣ Apply migrations
+```bash
+python manage.py migrate
+```
+
+### 5️⃣ Create admin account
+```bash
+python manage.py createsuperuser
+```
+
+### 6️⃣ Run development server
+```bash
+python manage.py runserver
+```
+
+System available at:  
+- Frontend Login → http://127.0.0.1:8000/login.html  
+- Django Admin → http://127.0.0.1:8000/admin/  
+
+---
+
+# 🗄️ Database Schema Summary
+
+### Tables:
+- Student  
+- Instructor  
+- Course  
+- Enrollment  
+- Grade  
+- User (Django Auth)
+
+### Relationship Model:
+- Student ↔ Enrollment ↔ Course  
+- Instructor ↔ Course  
+- Course ↔ Grade ↔ Student  
+
+---
+
+# 🧪 API Behavior (Production Notes)
+
+All endpoints return:
+
+```
+{
+  "status": "success/error",
+  "message": "",
+  "data": [...]
+}
+```
+
+Status Codes:
+- `200 OK`
+- `400 Bad Request`
+- `403 Forbidden`
+- `404 Not Found`
+- `500 Server Error`
+
+---
+
+# 🔧 Production Deployment (Basic Guide)
+
+### Recommended Stack:
+- Ubuntu 22.04  
+- PostgreSQL  
+- Nginx Reverse Proxy  
+- Gunicorn  
+- Supervisor for process management  
+- SSL via Certbot  
+
+Folder:
+```
+/var/www/faculty-academy/
+```
+
+Commands:
+```bash
+gunicorn academic.wsgi --bind 0.0.0.0:8001
+```
+
+Nginx will reverse-proxy → `localhost:8001`
+
+---
+
+# 🚀 Future Roadmap (Production Features)
+
+- JWT Authentication  
+- Full REST API with DRF  
+- Student Payments Module  
+- Attendance module  
+- Grades analytics dashboard  
+- Export transcripts (PDF)  
+- Multi-instructor courses  
+- Email Notifications  
+- Two-Factor Authentication  
+
+---
+
+# 📜 License  
+MIT License — free for educational and commercial use.
+
+---
+
+# 👨‍💻 Developer  
+**Mahmoud Attia Khalifa**  
+Full-Stack Developer • Django • AI • Cybersecurity  
+📧 Email: mahmoud.ektra@gmail.com  
+🔗 GitHub: https://github.com/Mahmoud3310B
